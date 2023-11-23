@@ -17,3 +17,7 @@ If all work has been done, the docker containers should be stopped, by running:
 
 [This Stack Overflow thread](https://stackoverflow.com/questions/46428420/docker-compose-up-down-stop-start-difference) discusses the difference between different `docker compose` commands.
 
+# Useful References
+
+- pandas [documentation for IO Tools](https://pandas.pydata.org/pandas-docs/version/0.14.1/io.html#sql-queries)
+- docker network create [documentation](https://docs.docker.com/engine/reference/commandline/network_create/)
