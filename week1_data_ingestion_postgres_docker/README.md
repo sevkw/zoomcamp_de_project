@@ -1,5 +1,7 @@
 # :artificial_satellite: Week 1 Summary 
-Course content Reference [link](https://dezoomcamp.streamlit.app/Week_1_Introduction_&_Prerequisites) from Zoomcamp
+Course content Reference [link](https://dezoomcamp.streamlit.app/Week_1_Introduction_&_Prerequisites) from Zoomcamp.
+
+Yellow Taxi data [source here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page).
 
 - Use Docker container and docker-compose to host postgres and pgadmin
 - Use Jupyter notebook when drafting the scripts
