@@ -41,6 +41,36 @@ $ python3 data_ingest.py \
 --table-name=yellow_taxi \
 --url=https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-09.parquet
 ```
+## 🐳Dockerfile
+The Dockerfile configures the python image, with all dependencies installed, to be able to run the `data_ingest.py`.
+
+When building the image ensure the following:
+
+1. The containers configured in the `docker-compose.yaml` file should be up and running in detach mode.
+
+    ```bash
+    docker compose up -d
+    ```
+2. If it is the first time running the docker container to run the `data_ingest.py`, the following command must be run to build the image:
+
+    ```bash
+    docker build -t ingest_taxi_data:ingest .
+    ```
+Note that whenever changes are made to the `Dockerfile`, the build command must be run to reflect the updates.
+
+3. Run the python script with the arguments using the following:
+    ```bash
+    docker run -it \
+    --network=week1_data_ingestion_postgres_docker_default \
+    ingest_taxi_data:ingest \
+    --user=admin \
+    --password=admin \
+    --host=pgdatabase \
+    --port=5432 \
+    --db=ny_taxi \
+    --table-name=yellow_taxi \
+    --url=https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-09.parquet
+    ```
 
 
 # 📚Useful References
@@ -48,3 +78,5 @@ $ python3 data_ingest.py \
 - pandas [documentation for IO Tools](https://pandas.pydata.org/pandas-docs/version/0.14.1/io.html#sql-queries)
 - docker network create [documentation](https://docs.docker.com/engine/reference/commandline/network_create/)
 - [argparse documentation](https://docs.python.org/3/library/argparse.html)
+- list the docker networks [documentation](https://docs.docker.com/engine/reference/commandline/network_ls/)
+- docker build command [documentation](https://docs.docker.com/engine/reference/commandline/build/)
