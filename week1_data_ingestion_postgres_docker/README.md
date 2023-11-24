@@ -15,13 +15,14 @@ Do not remove the containers when you are done because all the data will be lost
 
 ## 📂./script_drafts
 
-The `script_drafts` folder contains all the contents used when drafting the scripts to insert data. Before working with the Python Notebook, the docker containers configured in the `docker-compose.yaml` should be run:
+The `script_drafts` folder contains all the contents used when drafting the scripts to insert data. Before working with the Python Notebook, the docker containers configured in the `docker-compose.yaml` should be run (assume you have `cd`ed into the week_1 folder):
 
 `docker compose up -d`
 
+
 If all work has been done, the docker containers should be stopped, by running:
 
-`docker compose stop -d`
+`docker compose stop`
 
 [This Stack Overflow thread](https://stackoverflow.com/questions/46428420/docker-compose-up-down-stop-start-difference) discusses the difference between different `docker compose` commands.
 
