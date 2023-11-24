@@ -56,7 +56,7 @@ When building the image ensure the following:
     ```bash
     docker build -t ingest_taxi_data:ingest .
     ```
-Note that whenever changes are made to the `Dockerfile`, the build command must be run to reflect the updates.
+    Note that whenever changes are made to the `Dockerfile`, the build command must be run to reflect the updates.
 
 3. Run the python script with the arguments using the following:
     ```bash
