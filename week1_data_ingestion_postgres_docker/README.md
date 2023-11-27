@@ -6,6 +6,28 @@ Yellow Taxi data [source here](https://www.nyc.gov/site/tlc/about/tlc-trip-recor
 - Use Docker container and docker-compose to host postgres and pgadmin
 - Use Jupyter notebook when drafting the scripts
 - Divide the original data into chunks and load them chunk by chunk
+  
+## Cloud Services
+**Note:** For this project, I would use AWS services instead of GCP, because I'm more familiar with AWS service, and AWS's SDK client is more developed than that of GCP.
+
+**AWS Equivalents**
+- Data Lake: S3
+- Data Warehouse: Redshift
+  
+### AWS Setups
+- Set up a new IAM user and grant FullAccess to Redshift and S3 bucket
+- You can continue using your existing IAM user, but just need to ensure the correct policies are attached
+- The only difference for GCP is that GCP manages services by projects, and the services accounts created are available under the context of that project. Therefore, each service account is unique in each project.
+
+
+  
+
+## Terraform
+
+I personally find the Zoomcamp video very hard to follow (just not my style), so I consulted other resources online to learn about Terraform.
+I find [this video](https://youtu.be/l5k1ai_GBDE?feature=shared) to be a very good resource to get the general idea of the tool.
+[This video](https://youtu.be/7xngnjfIlK4?feature=shared) is another comprehensive one (2hrs) for deep dives as it offers multiple demos.
+
 
 # 💖Docker Container Warning
 
