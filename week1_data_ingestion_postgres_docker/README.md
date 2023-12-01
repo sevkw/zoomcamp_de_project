@@ -19,9 +19,6 @@ Yellow Taxi data [source here](https://www.nyc.gov/site/tlc/about/tlc-trip-recor
 - You can continue using your existing IAM user, but just need to ensure the correct policies are attached
 - The only difference for GCP is that GCP manages services by projects, and the services accounts created are available under the context of that project. Therefore, each service account is unique in each project.
 
-
-  
-
 ## Terraform
 
 I personally find the Zoomcamp video very hard to follow (just not my style), so I consulted other resources online to learn about Terraform.
