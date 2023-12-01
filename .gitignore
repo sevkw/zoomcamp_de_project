@@ -1,1 +1,5 @@
 .venv/
+.terraform/
+.terraform.*
+terraform.*
+errored.*
