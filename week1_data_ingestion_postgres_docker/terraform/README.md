@@ -18,6 +18,13 @@ In my actual work, I updated the main.tf a bit differently. However the concept 
 
 To summarize, we have to go through the following steps to ensure we have our whole infrastructure backed-up properly:
 
-1. Initiate the Backend resources. To do so, please pay attention to the inline comments and comment out the `backend` block in the `terraform` block. Other than that, you also need to comment out the resource configuration blocks for your actual infrastructure. Do the same for the `outputs.tf`. Eventually, you should first run `terraform init` and `terraform apply` with only the backend resources.
-2. After you have provisioned the backend resources, you should uncomment the `backend{}` block in the `main.tf` as well as the infrastructure resources' variables and outputs. After that run `terraform init` and `terraform apply` again to fully provision your infrastructure that will be backed up in cloud.
+1. Initiate the Backend resources. To do so, please first `cd` into the backend directory. From there, run `terraform init` and `terraform apply`.
+   
+2. You should have the s3 and dynamoDB resources being provisioned.
+   
+3. After you have provisioned the backend resources, go back to the terraform directory, and run `terraform init` and `terraform apply`. This will get the infrastructure provisioned for the s3 bucket for raw data and the Redshift. Note that the infrastructure will have a remote backend.
+4. To avoid being charged for Redshift instances, you can run `terraform destroy` to remove all the infrastructure services. Please ensure you are running `terraform destroy` in the `terraform` directory, not the `backend` directory. 
 
+# Reference
+
+- When I ran `terraform destroy`, an ERROR message saying `Redshift Cluster Instance FinalSnapshotIndentifier is required when a fianl snapshot is required` came up. I found [this Stackoverflow](https://stackoverflow.com/questions/50930470/terraform-error-rds-cluster-finalsnapshotidentifier-is-required-when-a-final-s) thread to be helpful.
