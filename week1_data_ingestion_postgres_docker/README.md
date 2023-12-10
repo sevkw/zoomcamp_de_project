@@ -7,23 +7,24 @@ Yellow Taxi data [source here](https://www.nyc.gov/site/tlc/about/tlc-trip-recor
 - Use Jupyter notebook when drafting the scripts
 - Divide the original data into chunks and load them chunk by chunk
   
-## Cloud Services
+## ⛈️Cloud Services
 **Note:** For this project, I would use AWS services instead of GCP, because I'm more familiar with AWS service, and AWS's SDK client is more developed than that of GCP.
 
 **AWS Equivalents**
 - Data Lake: S3
 - Data Warehouse: Redshift
   
-### AWS Setups
+### 👨‍💻AWS Setups
 - Set up a new IAM user and grant FullAccess to Redshift and S3 bucket
 - You can continue using your existing IAM user, but just need to ensure the correct policies are attached
 - The only difference for GCP is that GCP manages services by projects, and the services accounts created are available under the context of that project. Therefore, each service account is unique in each project.
 
-## Terraform
+## 🌮Terraform
 
 I personally find the Zoomcamp video very hard to follow (just not my style), so I consulted other resources online to learn about Terraform.
 I find [this video](https://youtu.be/l5k1ai_GBDE?feature=shared) to be a very good resource to get the general idea of the tool.
 [This video](https://youtu.be/7xngnjfIlK4?feature=shared) is another comprehensive one (2hrs) for deep dives as it offers multiple demos.
+[This link](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) contains all steps to download Terraform to local machine. You can also follow the Ubuntu section when downloading it to EC2 VM.
 
 
 # 💖Docker Container Warning
@@ -122,11 +123,20 @@ Host <name-of-instance>
     User ubuntu
     IdentityFile <full-path-to-the-key-pair-file>.pem
 ```
+🔴**Note**: the `HostName` will have to be updated is the instance is being stopped and restarted.
 
 ## 🏃Try Running Docker on EC2 Instance
 - `cd` into the week1 folder that contains the `docker-compose.yaml` file
 - build the image first
 - then run the container in detach mode
+- once ensuring the containers are up and running, run `data-ingest.py` using the commands above.
+- ensure you also forward ports to allow accessing the PgAdmin UI from localhost, see reference below
+
+## 🏗️Install Terraform on EC2 VM and Run Terraform Commands
+- follow the reference in the Terraform section above to install
+- go into the terraform folder and run the corresponding terraform commands to initialize backends and other AWS services (just like how it's down on the local machine!)
+- 🚫Note: you must again configure your AWS credentials by running `aws configure` in the EC2 terminal
+- ⚠️WARNING: if you have done the Terraform exercise on local machine you should not go into the Back end folder and initialize terraform again, assume you did not destroy the provinsioned S3 bucket and DynamoDB table in local machine exercise. So you can just initialize the terraform in the `/terraform` folder and run the data services!
 
 # 📚Useful References
 
@@ -136,3 +146,4 @@ Host <name-of-instance>
 - list the docker networks [documentation](https://docs.docker.com/engine/reference/commandline/network_ls/)
 - docker build command [documentation](https://docs.docker.com/engine/reference/commandline/build/)
 - [this section of the zoomcamp video](https://youtu.be/ae-CV2KfoN0?feature=shared&t=1282) trouble shoots the issue when running `docker run` in the ec2 terminal; and here is [the docker reference](https://docs.docker.com/engine/install/linux-postinstall/) to run docker commands without `sudo`
+- Forward port to local machine on VS Code [reference](https://code.visualstudio.com/docs/editor/port-forwarding#:~:text=How%20to%20use%20local%20port%20forwarding,-First%2C%20you%20need&text=Then%2C%20navigate%20to%20the%20Ports,above%20command%20is%20port%203000.), and it was explained in [this part of the zoomcamp video](https://youtu.be/ae-CV2KfoN0?feature=shared)
