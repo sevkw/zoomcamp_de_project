@@ -90,7 +90,43 @@ When building the image ensure the following:
     --table-name=yellow_taxi \
     --url=https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-09.parquet
     ```
+# ☁️Launching AWS Instances to Run This Week's Exercise in the Cloud
+The VM instance exercise is launched using EC2 instance. The idea is basically the same as how GCP instance is set up.
+In the video, a Ubuntu image is used with 4GPU and 16GB memory. When setting up a new instance in AWS EC2, we can select the Ubuntu AMI image from the Free tier. However, for computing power, I would recommend using at least t2.small or match the computing power to what the video had (I personally think it is a bit too large, so I used a t2.small).
+Ensure the `.pem` key pair is downloaded and saved in the project's directory so that you can SSH into the VM.
 
+## ⚙️Configure EC2 VM
+I ran the following commands in the virtual machine. Note that I did not use anaconda, instead, I used python virtual environment and pip installed the libraries.
+```bash
+sudo apt update -y
+sudo apt install python3-pip -y
+sudo apt install python3.10-venv -y
+sudo apt-get install libpq-dev -y
+sudo apt install awscli -y
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pandas
+pip install sqlalchemy
+```
+- install docker by referencing [this link](https://docs.docker.com/engine/install/ubuntu/)
+- run `sudo apt install docker-compose -y`
+- on the EC2 terminal, clone this repo or if you have a version of the code base, you can clone from your own repo as well.
+
+## 🧰Remote Host Configuration
+
+To be able to connect to the host VM via VS Code, below is the configuration:
+
+```markdown
+Host <name-of-instance>
+    HostName <public-ip-address-of-ec2-instance>
+    User ubuntu
+    IdentityFile <full-path-to-the-key-pair-file>.pem
+```
+
+## 🏃Try Running Docker on EC2 Instance
+- `cd` into the week1 folder that contains the `docker-compose.yaml` file
+- build the image first
+- then run the container in detach mode
 
 # 📚Useful References
 
@@ -99,3 +135,4 @@ When building the image ensure the following:
 - [argparse documentation](https://docs.python.org/3/library/argparse.html)
 - list the docker networks [documentation](https://docs.docker.com/engine/reference/commandline/network_ls/)
 - docker build command [documentation](https://docs.docker.com/engine/reference/commandline/build/)
+- [this section of the zoomcamp video](https://youtu.be/ae-CV2KfoN0?feature=shared&t=1282) trouble shoots the issue when running `docker run` in the ec2 terminal; and here is [the docker reference](https://docs.docker.com/engine/install/linux-postinstall/) to run docker commands without `sudo`
