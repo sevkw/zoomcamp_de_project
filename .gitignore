@@ -3,3 +3,4 @@
 .terraform.*
 terraform.*
 errored.*
+project_credentials/
