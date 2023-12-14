@@ -125,7 +125,7 @@ Host <name-of-instance>
     User ubuntu
     IdentityFile <full-path-to-the-key-pair-file>.pem
 ```
-🔴**Note**: the `HostName` will have to be updated is the instance is being stopped and restarted.
+🔴**Note**: the `HostName` will have to be updated if the instance is being stopped and restarted.
 
 ## 🏃Try Running Docker on EC2 Instance
 - `cd` into the week1 folder that contains the `docker-compose.yaml` file
