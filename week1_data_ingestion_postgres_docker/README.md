@@ -6,6 +6,8 @@ Yellow Taxi data [source here](https://www.nyc.gov/site/tlc/about/tlc-trip-recor
 - Use Docker container and docker-compose to host postgres and pgadmin
 - Use Jupyter notebook when drafting the scripts
 - Divide the original data into chunks and load them chunk by chunk
+- Infrastructure as code with Terraform (see more details in the `terraform` folder)
+- Launching data pipeline in the cloud using AWS (the course uses GCP)
   
 ## ⛈️Cloud Services
 **Note:** For this project, I would use AWS services instead of GCP, because I'm more familiar with AWS service, and AWS's SDK client is more developed than that of GCP.
