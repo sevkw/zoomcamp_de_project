@@ -91,7 +91,6 @@ Follow [this section](https://prefecthq.github.io/prefect-aws/#using-prefect-wit
 
 Note that, unlike the previous section, the code was started from scratch. This means that the `data_ingest.py` code we had from week 1 would not be reused. However, the idea is still the same.
 
-
 # 📚References
 
 - Original source code from the zoomcamp demo can be found [here](https://github.com/discdiver/prefect-zoomcamp)
