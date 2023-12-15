@@ -61,13 +61,11 @@ def ingest_data(df, user, password, host, port, db, table_name):
     df.to_sql(name=table_name, con=engine, if_exists='append', index=False)
 
 @flow(name="Ingest Flow")
-def main_flow():
+def main_flow(table_name:str, db:str):
     user = "admin"
     password = "admin"
     host = "localhost"
     port = "5432"
-    db = "ny_taxi"
-    table_name = "yellow_taxi"
     url = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-09.parquet"
 
     raw_data = extract_data(url)
@@ -75,4 +73,4 @@ def main_flow():
     ingest_data(data, user, password, host, port, db, table_name)
 
 if __name__ == '__main__':
-    main_flow()
+    main_flow(table_name="yellow_taxi", db="ny_taxi")
