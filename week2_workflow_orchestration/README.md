@@ -67,7 +67,7 @@ database_block = SqlAlchemyConnector.load("postgres-connector")
 with database_block:
     ...
 ```
-# Prefect Intro Folder
+# Prefect_Intro Folder 📂
 This section explains the `.py` code files and what each does.
 The corresponding video: [DE Zoomcamp 2.2 - Introduction to Prefect Concepts](https://youtu.be/cdtN6dhp708?feature=shared)
 ## python file explanation
@@ -76,7 +76,15 @@ The corresponding video: [DE Zoomcamp 2.2 - Introduction to Prefect Concepts](ht
 - `data_etl.py`: improves upon the `data_ingest_prefect.py` by breaking down the big `main_flow()` function into task components to demonstrate the concept of tasks in Prefect
 - `data_etl_blocks.py`: additional code added to the `data_etl.py` to demonstrate the concept of blocks in Prefect. **Pay attention to how the postgres connection engine and function parameter code can be simplified when compare to the data_etl.py.**
 
+# Etl_Aws Folder 📂
+Note that in the original video, GCP was used. Because I personally prefer AWS, so I re-write this whole section to allow the ETL to save the final result to AWS S3 bucket.
+The package `prefect-aws` was used.
+
+## Creating a AWS Credentials Block in Prefect UI
+According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section). 
+
 # 📚References
 
 - Original source code from the zoomcamp demo can be found [here](https://github.com/discdiver/prefect-zoomcamp)
 - Learn about Prefect Blocks [here](https://docs.prefect.io/latest/concepts/blocks/)
+- `prefect-aws` [documentation](https://prefecthq.github.io/prefect-aws/)

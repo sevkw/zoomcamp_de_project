@@ -1,7 +1,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from time import time
-import argparse
 import os
 # import prefect modules with flow and task decorators
 from prefect import flow, task
