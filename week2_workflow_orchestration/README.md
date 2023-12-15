@@ -76,12 +76,21 @@ The corresponding video: [DE Zoomcamp 2.2 - Introduction to Prefect Concepts](ht
 - `data_etl.py`: improves upon the `data_ingest_prefect.py` by breaking down the big `main_flow()` function into task components to demonstrate the concept of tasks in Prefect
 - `data_etl_blocks.py`: additional code added to the `data_etl.py` to demonstrate the concept of blocks in Prefect. **Pay attention to how the postgres connection engine and function parameter code can be simplified when compare to the data_etl.py.**
 
-# Etl_Aws Folder 📂
+# Extraction_AWS Folder 📂
 Note that in the original video, GCP was used. Because I personally prefer AWS, so I re-write this whole section to allow the ETL to save the final result to AWS S3 bucket.
 The package `prefect-aws` was used.
 
+Another thing to point out is that, although the zoomcamp demonstrated with an "etl", it is in fact not an ETL because the original code does not load the data to a database. Instead, the whole process is actually an **Extraction** process, where original raw data taken from the source is cleaned up a bit, and then saved to a landing zone before the actual transformation takes place. Therefore, instead of naming the folder and file to `etl_`, I named it to `extraction_` to reflect the nature of the code. 
+
 ## Creating a AWS Credentials Block in Prefect UI
-According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section). 
+According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section).
+
+## Using Prefect with AWS S3
+To be able to follow this section, we will need to create a new bucket for us to save the extracted and cleaned data.
+Follow [this section](https://prefecthq.github.io/prefect-aws/#using-prefect-with-aws-s3) of the documentation to add the code.
+
+Note that, unlike the previous section, the code was started from scratch. This means that the `data_ingest.py` code we had from week 1 would not be reused. However, the idea is still the same.
+
 
 # 📚References
 
