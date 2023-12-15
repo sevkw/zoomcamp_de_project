@@ -43,12 +43,36 @@ python data_ingest_prefect.py
 ```
 After that you should be able to see this flow being completed in the self-hosted UI.
 
+## Prefect Blocks Setup
+Following [the video](https://youtu.be/cdtN6dhp708?feature=shared&t=1861), a SQLAlchemy block has to be set up via the Prefect UI. At a high level, blocks are reusable variables, credentials, and objects that can be referenced in our flows.
+
+The block is set up per below:
+
+```
+block name: postgres-connector
+driver: postgesql+psycopg2
+database: ny_taxi
+username: admin
+password: admin
+host: localhost
+port: 5432
+```
+
+After setting up the block, copy or retype the following code from the block to the `.py` file:
+
+```python
+from prefect_sqlalchemy import SqlAlchemyConnector
+
+database_block = SqlAlchemyConnector.load("postgres-connector")
+with database_block:
+    ...
+```
+
 ## python file explanation
 - `data_ingest.py`: the original data ingest code without any prefect decorators
 - `data_ingest_prefect.py`: original data ingest code with simple `@flow` and `@task` decorators for concept demonstration
 - `data_etl.py`: improves upon the `data_ingest_prefect.py` by breaking down the big `main_flow()` function into task components to demonstrate the concept of tasks in Prefect
-
-
+- `data_etl_blocks.py`: additional code added to the `data_etl.py` to demonstrate the concept of blocks in Prefect. **Pay attention to how the postgres connection engine and function parameter code can be simplified when compare to the data_etl.py.**
 
 # 📚References
 
