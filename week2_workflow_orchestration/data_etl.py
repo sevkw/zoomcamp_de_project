@@ -60,6 +60,11 @@ def ingest_data(df, user, password, host, port, db, table_name):
 
     df.to_sql(name=table_name, con=engine, if_exists='append', index=False)
 
+# subflow demonstration
+@flow(name="Subflow", log_prints=True)
+def log_subflow(table_name:str):
+    print(f"Logging Subflow for {table_name}.")
+
 @flow(name="Ingest Flow")
 def main_flow(table_name:str, db:str):
     user = "admin"
@@ -68,6 +73,7 @@ def main_flow(table_name:str, db:str):
     port = "5432"
     url = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-09.parquet"
 
+    log_subflow(table_name)
     raw_data = extract_data(url)
     data = transform_data(raw_data)
     ingest_data(data, user, password, host, port, db, table_name)
