@@ -53,3 +53,4 @@ After that you should be able to see this flow being completed in the self-hoste
 # 📚References
 
 - Original source code from the zoomcamp demo can be found [here](https://github.com/discdiver/prefect-zoomcamp)
+- Learn about Prefect Blocks [here](https://docs.prefect.io/latest/concepts/blocks/)
