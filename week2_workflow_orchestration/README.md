@@ -67,7 +67,9 @@ database_block = SqlAlchemyConnector.load("postgres-connector")
 with database_block:
     ...
 ```
-
+# Prefect Intro Folder
+This section explains the `.py` code files and what each does.
+The corresponding video: [DE Zoomcamp 2.2 - Introduction to Prefect Concepts](https://youtu.be/cdtN6dhp708?feature=shared)
 ## python file explanation
 - `data_ingest.py`: the original data ingest code without any prefect decorators
 - `data_ingest_prefect.py`: original data ingest code with simple `@flow` and `@task` decorators for concept demonstration
