@@ -7,6 +7,24 @@ To be able to run the local python codes and load the data to the postgres datab
 docker compose up -d
 ```
 
+### Terraform from Week1 Can be Used for This Week's Exerice
+This week's exercise involves extracting raw data from original source and save a copy to s3 bucket. Then reading the raw copy from s3 bucket and transform it. The transformed data will be uploaded to Amazon Redshift. 
+
+Recall from Week 1's exercise, we have used Terraform to configure the resources we need. Therefore, before beginning this week's exericse, you can go into week1 folder and run `terraform apply` command inside the `terraform/` directory to start the service.
+
+If you only want to provision only 1 resource, for example, only provision the Redshift service, simply run the following:
+
+```bash
+terraform apply -target=aws_redshift_cluster.data_set
+```
+For provisioning only the S3 bucket service, simply run:
+
+```bash
+terraform apply -target=aws_s3_bucket.data-lake-bucket
+```
+
+Doing so will help you save the money from being charged from using the Redshift cluster resource. After finishing your exercise, you can also run `terraform destroy -target=` to destroy the resource you want to remove.
+
 ## Prefect Tutorial
 I personally felt a bit nervous when just learning about Prefect from scratch through the zoomcamp. Therefore, before I started, I studied the basic concepts via Prefect's guide. I highly recommend following the official website to learn the basic, because the zoomcamp contents will make more sense afterwards.
 
@@ -91,8 +109,31 @@ Follow [this section](https://prefecthq.github.io/prefect-aws/#using-prefect-wit
 
 Note that, unlike the previous section, the code was started from scratch. This means that the `data_ingest.py` code we had from week 1 would not be reused. However, the idea is still the same.
 
+## Uploading DataFrame to Redshift
+To be able to do this, the best approach would be using the AWS SDK called [aws-wrangler](https://aws-sdk-pandas.readthedocs.io/en/stable/).
+The `/aws_wrangler_tutorial` contains some simple python notebook exercise I did to test out this method before adding it to the actual code.
+
+The following has to be set up to ensure correct connection to Redshift and run the python notebook:
+1. Ensure you provision the redshift resource. This can be done by running `terraform apply -target=aws_redshift_cluster.data_set` in week1's terraform folder.
+2. After the cluster is created, create a Glue Connection so that you can reference the Glue connection in the `awswranger.connect()`
+
+This [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect-to-aws-redshift-using-awswrangler) provides very good detail on how this step is done.
+
+**Note: if the provisioned Redshift cluster is destroyed and recreated when you resume your work. You need to double check your connection is configured correctly. You will also need to recreate Clue Connection.**
+
+You will also need to ensure your VPC cluster's security group is configured to allow inbound traffic via port 5439. For simplicity I just allowed all IPv4 and IPv6 inbound flow from anywhere to my Redshift Cluster. If this is not properly set up, you will encounter a timeout when trying to connect to Redshift using the awswrangler.
+
+After you have uploaded data to redshift, make sure you are connecting to the database using username and password. By default, you will be connected via your current IAM user, which you will not see any data coming up. 
+
 # 📚References
 
 - Original source code from the zoomcamp demo can be found [here](https://github.com/discdiver/prefect-zoomcamp)
 - Learn about Prefect Blocks [here](https://docs.prefect.io/latest/concepts/blocks/)
 - `prefect-aws` [documentation](https://prefecthq.github.io/prefect-aws/)
+
+- awswrangler: Redshift copy and upload [tutorial reference](https://aws-sdk-pandas.readthedocs.io/en/stable/tutorials/008%20-%20Redshift%20-%20Copy%20%26%20Unload.html)
+- awswrangler.redshift.to_sql [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.to_sql.html)
+- awswrangler.redshift.copy [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.copy.html)
+- awswrangler.redshift.connect [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.connect.html)
+- Connect to AWS Redshift using awswrangler [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect-to-aws-redshift-using-awswrangler)
+- [AWS Official Documentation](https://docs.aws.amazon.com/redshift/latest/dg/c_loading-data-best-practices.html) for Loading Data to Redshift
