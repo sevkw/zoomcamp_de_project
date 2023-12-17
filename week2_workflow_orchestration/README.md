@@ -119,7 +119,7 @@ The following has to be set up to ensure correct connection to Redshift and run 
 
 This [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect-to-aws-redshift-using-awswrangler) provides very good detail on how this step is done.
 
-**Note: if the provisioned Redshift cluster is destroyed and recreated when you resume your work. You need to double check your connection is configured correctly. You will also need to recreate Clue Connection.**
+**Note: if the provisioned Redshift cluster is destroyed and recreated when you resume your work. You need to double check your connection is configured correctly. You will also need to recreate Glue Connection.**
 
 You will also need to ensure your VPC cluster's security group is configured to allow inbound traffic via port 5439. For simplicity I just allowed all IPv4 and IPv6 inbound flow from anywhere to my Redshift Cluster. If this is not properly set up, you will encounter a timeout when trying to connect to Redshift using the awswrangler.
 
