@@ -9,7 +9,7 @@ variable "s3_bucket_name_datalake" {
 variable "redshift_cluster_name_dataset" {
   description = "Name for the Redshift cluster"
   type = string
-  default = "dataset-redshift"
+  default = "zoomcamp-dataset-redshift"
 }
 
 variable "redshift_cluster_db_dataset" {
@@ -30,10 +30,21 @@ variable "redshift_service_role" {
   default = "arn:aws:iam::571772404385:role/redshift-service-role"
 }
 
-
-
 variable "redshift_security_group_list" {
   description = "The list of security group IDs to be associated with the provisioned Redshift service"
   type = list
   default = ["sg-0cf5b9ef80fe2fca1"]
+}
+
+variable "redshift_serverless_ns_name" {
+  description = "The name of Redshift Serverless namespace"
+  type = string
+  default = "zoomcamp-redshift"
+}
+
+variable "redshift_serverless_wg_name" {
+  description = "The name of Redshift Serverless workgroup"
+  type = string
+  default = "zoomcamp-redshift-workgroup"
+  
 }

@@ -31,10 +31,16 @@ At the time of the creation of this repo, Redshift Serverless is available for t
 **Please ensure you have the following set up before you configure Redshift service:**
 1. IAM Role: I recommend creating a new IAM Role dedicated to be attached to allow the Redshift service to have access to other AWS resources, such as S3 bucket. To learn more about IAM Roles, checkout [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html). Here are the policies I attached to the dedicated IAM role for redshift: `AmazonDMSRedshiftS3Role`, `AmazonRedshiftAllCommandsFullAccess`, `AmazonRedshiftFullAccess`, `AmazonRedshiftQueryEditorV2FullAccess`, `AmazonS3ReadOnlyAccess`. I named this IAM role `redshift-service-role`.
 2. Security groups: This has to be set up to allow inbound or outbound traffic to access Redshift. For example, uploading data to Redshift will require an access via port 5439. If the security group is not set up properly, you cannot upload data. To lean more about AWS VPC security groups, check out [here](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html). Here are my settings for the security group, which I named `redshift-security`: Allowed both Ipv4 and Ipv6 traffic via port 5439 from anywhere. (Note that in actual practice this is not the ideal setting.)
-
+   
 After setting these up, ensure you configure these for your Redshift resource.
+
+## 🏗️ Provisioning AWS Redshift Serverless
+AWS Redshift Serverless provision involves two parts: a namespace - the objects - and a workgroup - the computing resources. Each will be configured individually. You will first need to configure the namespace and then configuring the workgroup while referencing the namespace. See more details in the Terraform AWS documentation in the Reference section.
+
 # Reference 📚
 
 - When I ran `terraform destroy`, an ERROR message saying `Redshift Cluster Instance FinalSnapshotIndentifier is required when a fianl snapshot is required` came up. I found [this Stackoverflow](https://stackoverflow.com/questions/50930470/terraform-error-rds-cluster-finalsnapshotidentifier-is-required-when-a-final-s) thread to be helpful.
 - [Terraform aws documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_cluster) for configuring Redshift cluster
 - [Terraform aws documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshiftserverless_namespace) for configuring Redshift serverless namespace
+- [Terraform aws documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshiftserverless_workgroup) for configuring Redshift serverless workgroup 
+- [This Medium article](https://gmusumeci.medium.com/how-to-deploy-an-amazon-redshift-serverless-in-aws-using-terraform-1cf67835d3b4) provides great example on how to configure Redshift Serverless. However, for this reference, I do not recommend saving your AWS ACCESS Keys as `variables.tf`. Please only reference to the part that showcases the Redshift Serverless configuration.
