@@ -17,6 +17,13 @@ If you only want to provision only 1 resource, for example, only provision the R
 ```bash
 terraform apply -target=aws_redshift_cluster.data_set
 ```
+For provisioning only the Redshift Serverless namespace and workgroup at once:
+
+```bash
+terraform apply -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset
+```
+**Note: Can only choose Redshift Clusters or Redshift Serverless Namespace & Workgroup. Also remember to comment/uncomment out the corresponding service configuration sections in the `main.tf`**
+
 For provisioning only the S3 bucket service, simply run:
 
 ```bash
@@ -137,3 +144,6 @@ After you have uploaded data to redshift, make sure you are connecting to the da
 - awswrangler.redshift.connect [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.connect.html)
 - Connect to AWS Redshift using awswrangler [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect-to-aws-redshift-using-awswrangler)
 - [AWS Official Documentation](https://docs.aws.amazon.com/redshift/latest/dg/c_loading-data-best-practices.html) for Loading Data to Redshift
+- [Great Redshift tutorial](https://docs.aws.amazon.com/redshift/latest/gsg/new-user-serverless.html) from AWS for absolute beginners
+- [AWS tutorial](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) on IAM Roles (sharing this here b.c it is better to attach IAM roles to Redshift clusters)
+- Overview of Redshift Serverless workgroups and namespaces [official guide](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-workgroup-namespace.html)
