@@ -5,7 +5,7 @@ output "datalake_s3_bucket_arn" {
   description = "The ARN of the S3 bucket for datalake."
 }
 
-# output "redshift_cluster_db_name" {
+# output "redshift_cluster_arn" {
 #   value       = aws_redshift_cluster.data_set.arn
 #   description = "The ARN of the Redshift cluster."
 # }
