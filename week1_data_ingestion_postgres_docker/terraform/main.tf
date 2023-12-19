@@ -66,6 +66,7 @@ data "aws_ssm_parameter" "redshift_password" {
   name = "/redshift/zoomcamp-dataset" #assume you have saved a Parameter in the SSM Manager's Parameter Store
 }
 
+## Below is code for configuring Redshift Cluster service
 resource "aws_redshift_cluster" "data_set" {
   cluster_identifier = var.redshift_cluster_name_dataset
   database_name      = var.redshift_cluster_db_dataset
@@ -74,4 +75,7 @@ resource "aws_redshift_cluster" "data_set" {
   node_type          = "dc2.large" # double check with the node_type available in your region, as this could be different in other regions
   cluster_type       = "single-node"
   skip_final_snapshot = true
+  iam_roles = var.redshift_iam_roles
+  default_iam_role_arn = var.redshift_service_role
+  vpc_security_group_ids = var.redshift_security_group_list
 }
