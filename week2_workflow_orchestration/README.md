@@ -137,15 +137,18 @@ After you have uploaded data to redshift, make sure you are connecting to the da
 
 - Original source code from the zoomcamp demo can be found [here](https://github.com/discdiver/prefect-zoomcamp)
 - Learn about Prefect Blocks [here](https://docs.prefect.io/latest/concepts/blocks/)
+## Prefect Reference
 - `prefect-aws` [documentation](https://prefecthq.github.io/prefect-aws/)
-
+## AWS SDK `awswrangler` Reference
 - awswrangler: Redshift copy and upload [tutorial reference](https://aws-sdk-pandas.readthedocs.io/en/stable/tutorials/008%20-%20Redshift%20-%20Copy%20%26%20Unload.html)
 - awswrangler.redshift.to_sql [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.to_sql.html)
 - awswrangler.redshift.copy [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.copy.html)
 - awswrangler.redshift.connect [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.connect.html)
 - Connect to AWS Redshift using awswrangler [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect-to-aws-redshift-using-awswrangler)
+## AWS Official Guide
 - [AWS Official Documentation](https://docs.aws.amazon.com/redshift/latest/dg/c_loading-data-best-practices.html) for Loading Data to Redshift
-- [Great Redshift tutorial](https://docs.aws.amazon.com/redshift/latest/gsg/new-user-serverless.html) from AWS for absolute beginners
+- [Great Redshift tutorial](https://docs.aws.amazon.com/redshift/latest/gsg/new-user-serverless.html) from AWS for absolute beginners to learn about loading data from s3 to Redshift
 - [AWS tutorial](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) on IAM Roles (sharing this here b.c it is better to attach IAM roles to Redshift clusters)
 - Overview of Redshift Serverless workgroups and namespaces [official guide](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-workgroup-namespace.html)
+## Other References for Troubleshooting
 - [Useful Stackoverflow Thread ](https://stackoverflow.com/questions/71521678/configuring-python-redshift-connector-or-psycopg2-to-connect-with-redshift-ser)explaining timeout when trying to connect to Redshift Serverless workgroup using redshift-connect module. Basically we need to configure the workgroup to be **publicly accessible**
