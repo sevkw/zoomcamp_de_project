@@ -6,6 +6,7 @@ from prefect import flow, task
 from prefect.tasks import task_input_hash
 # You will need an AWS account and credentials in order to use prefect-aws
 from prefect_aws import AwsCredentials, S3Bucket
+from create_table_queries import create_yellow_trips_data
 
 @task(log_prints=True, retries=3)
 def download_from_s3(bucket:str, file_name:str) -> Path:

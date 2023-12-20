@@ -48,7 +48,8 @@ def write_to_s3(path:Path, bucket: str) -> None:
         bucket_name=bucket,
         aws_credentials=aws_credentials
     )
-    s3_bucket.upload_from_path(path)
+    base_path = "extracted_raw"
+    s3_bucket.upload_from_path(from_path=path, to_path=f"{base_path}/{path}")
 
     print(f"File from path {path} has been uploaded to bucket: {bucket}.")
 
@@ -57,17 +58,19 @@ def write_to_s3(path:Path, bucket: str) -> None:
 def extract_data_to_s3() -> None:
     """
         The main flow function that extracts raw data from original source and save the cleaned data to AWS S3 bucket.
-        The AWS S3 bucket to save the data is called zoomcamp-extracted-data.
+        The AWS S3 bucket to save the data is called datalake-bucket-zoomcamp-2023, this is provisioned by Terraform.
+        Ensure that the s3 bucket has been provisioned by running:
+        terraform apply -target=aws_s3_bucket.data-lake-bucket -target=aws_s3_bucket_versioning.datalake_versioning -target=aws_s3_bucket_lifecycle_configuration.datalake-lifecycle
     """
     color = "yellow"
     year = 2023
     month = 9
     data_partition_name = f"{color}_tripdata_{year}-{month:02}"
     data_source_url = f"https://d37ci6vzurychx.cloudfront.net/trip-data/{data_partition_name}.parquet"
-
+    bucket_name = "datalake-bucket-zoomcamp-2023"
     raw_df = extract_data(data_source_url)
     local_path = write_local(raw_df, color, data_partition_name)
-    write_to_s3(local_path, bucket="zoomcamp-extracted-data")
+    write_to_s3(local_path, bucket=f"{bucket_name}")
 
 if __name__ == "__main__":
     extract_data_to_s3()
