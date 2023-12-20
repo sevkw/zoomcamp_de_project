@@ -21,6 +21,7 @@ For provisioning only the Redshift Serverless namespace and workgroup at once:
 
 ```bash
 terraform apply -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset
+terraform destroy -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset
 ```
 **Note: Can only choose Redshift Clusters or Redshift Serverless Namespace & Workgroup. Also remember to comment/uncomment out the corresponding service configuration sections in the `main.tf`**
 
@@ -147,3 +148,4 @@ After you have uploaded data to redshift, make sure you are connecting to the da
 - [Great Redshift tutorial](https://docs.aws.amazon.com/redshift/latest/gsg/new-user-serverless.html) from AWS for absolute beginners
 - [AWS tutorial](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) on IAM Roles (sharing this here b.c it is better to attach IAM roles to Redshift clusters)
 - Overview of Redshift Serverless workgroups and namespaces [official guide](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-workgroup-namespace.html)
+- [Useful Stackoverflow Thread ](https://stackoverflow.com/questions/71521678/configuring-python-redshift-connector-or-psycopg2-to-connect-with-redshift-ser)explaining timeout when trying to connect to Redshift Serverless workgroup using redshift-connect module. Basically we need to configure the workgroup to be **publicly accessible**
