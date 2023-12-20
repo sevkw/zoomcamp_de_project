@@ -20,8 +20,8 @@ terraform apply -target=aws_redshift_cluster.data_set
 For provisioning only the Redshift Serverless namespace and workgroup at once:
 
 ```bash
-terraform apply -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset
-terraform destroy -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset
+terraform apply -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset -target=aws_redshiftserverless_usage_limit.zoomcamp_dataset
+terraform destroy -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset -target=aws_redshiftserverless_usage_limit.zoomcamp_dataset
 ```
 **Note: Can only choose Redshift Clusters or Redshift Serverless Namespace & Workgroup. Also remember to comment/uncomment out the corresponding service configuration sections in the `main.tf`**
 

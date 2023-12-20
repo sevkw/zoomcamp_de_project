@@ -98,6 +98,14 @@ resource "aws_redshiftserverless_workgroup" "zoomcamp_dataset" {
   security_group_ids = var.redshift_security_group_list
 }
 
+# set a limit to redshift serverless to save money ;)
+# checkout reference section for more information
+resource "aws_redshiftserverless_usage_limit" "zoomcamp_dataset" {
+  resource_arn = aws_redshiftserverless_workgroup.zoomcamp_dataset.arn
+  usage_type   = "serverless-compute"
+  amount       = 8
+}
+
 ## glue connection for uploading data to Redshift
 ## may be needed if connecting to redshift serverless via aws wrangle
 ## does not need if connecting using redshift-connector module
