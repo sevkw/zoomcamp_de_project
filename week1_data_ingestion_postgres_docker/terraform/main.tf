@@ -86,14 +86,30 @@ resource "aws_redshiftserverless_namespace" "zoomcamp_dataset" {
   namespace_name = var.redshift_serverless_ns_name
   iam_roles = var.redshift_iam_roles
   default_iam_role_arn = var.redshift_service_role
-  # admin_username = "masteruser"
-  # admin_user_password = data.aws_ssm_parameter.redshift_password.value
+  admin_username = "masteruser"
+  admin_user_password = data.aws_ssm_parameter.redshift_password.value
   db_name = var.redshift_cluster_db_dataset
 }
 
 resource "aws_redshiftserverless_workgroup" "zoomcamp_dataset" {
   namespace_name = aws_redshiftserverless_namespace.zoomcamp_dataset.id
   workgroup_name = var.redshift_serverless_wg_name
-  publicly_accessible = false
+  publicly_accessible = true
   security_group_ids = var.redshift_security_group_list
 }
+
+## glue connection for uploading data to Redshift
+## may be needed if connecting to redshift serverless via aws wrangle
+## does not need if connecting using redshift-connector module
+# resource "aws_glue_connection" "redshift_serverless_glue" {
+#     name = "zoomcamp glue"
+#     connection_type = "JDBC"
+#     description = "Connection created for Redshift serverless namespace and aws wrangler python notebook demo"
+
+#     connection_properties = {
+#       JDBC_CONNECTION_URL = "jdbc:redshift://${aws_redshiftserverless_workgroup.zoomcamp_dataset.endpoint[0].address}/${aws_redshiftserverless_namespace.zoomcamp_dataset.db_name}"
+#       USERNAME = "masteruser"
+#       PASSWORD = data.aws_ssm_parameter.redshift_password.value
+#     }
+
+# }

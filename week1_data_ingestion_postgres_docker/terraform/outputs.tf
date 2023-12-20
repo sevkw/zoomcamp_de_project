@@ -14,6 +14,18 @@ output "redshift_serverless_namespace_arn" {
   value = aws_redshiftserverless_namespace.zoomcamp_dataset.arn
 }
 
+output "redshift_serverless_namespace_dbname" {
+  value = aws_redshiftserverless_namespace.zoomcamp_dataset.db_name
+}
+
 output "redshift_serverless_workgroup_arn" {
   value = aws_redshiftserverless_workgroup.zoomcamp_dataset.arn
+}
+
+output "redshift_serverless_wg_vpcendpoint_address" {
+  value = aws_redshiftserverless_workgroup.zoomcamp_dataset.endpoint[0].address
+}
+
+output "redshift_serverless_wg_vpcendpoint_port" {
+  value = aws_redshiftserverless_workgroup.zoomcamp_dataset.endpoint[0].port
 }
