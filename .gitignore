@@ -7,3 +7,4 @@ project_credentials/
 aws_credentials.py
 .env.aws_credentials
 terraform.tfstate.backup
+__pycache__/*
