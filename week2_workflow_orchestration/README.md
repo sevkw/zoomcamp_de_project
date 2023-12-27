@@ -108,6 +108,13 @@ The package `prefect-aws` was used.
 
 Another thing to point out is that, although the zoomcamp demonstrated with an "etl", it is in fact not an ETL because the original code does not load the data to a database. Instead, the whole process is actually an **Extraction** process, where original raw data taken from the source is cleaned up a bit, and then saved to a landing zone before the actual transformation takes place. Therefore, instead of naming the folder and file to `etl_`, I named it to `extraction_` to reflect the nature of the code. 
 
+Overall the code files are very straight forward:
+
+`-create_table_queries.py`: this is not the code file, but a variable I created to store the CREATE TABLE sql query, which would later be used in the `extract_s3_to_redshift.py`
+- `extract_to_aws.py`: this is the code that extracts the original data from the public source and store a copy of the exact source to s3 bucket. In actual practice, your company may have data generated from a source system. You should always make a copy of the original source data and save it (for backup purpose), and then run your transformation based on this copy.
+- `parameterized_extract_to_s3.py`: This is the `parameterized version` of `extract_to_aws.py` that demonstrate how you can avoid running the same flow for multiple times by parameterizing some critical variables into the flow code.
+- `extract_s3_to_redshift.py`: this is the code where the source data copy in the s3 is transformed and cleaned up, and then the cleaned-up version is saved to a transformed folder in the data warehouse (AWS Redshift).
+
 ## Creating a AWS Credentials Block in Prefect UI
 According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section).
 
