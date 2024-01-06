@@ -113,7 +113,9 @@ Overall the code files are very straight forward:
 `-create_table_queries.py`: this is not the code file, but a variable I created to store the CREATE TABLE sql query, which would later be used in the `extract_s3_to_redshift.py`
 - `extract_to_aws.py`: this is the code that extracts the original data from the public source and store a copy of the exact source to s3 bucket. In actual practice, your company may have data generated from a source system. You should always make a copy of the original source data and save it (for backup purpose), and then run your transformation based on this copy.
 - `parameterized_extract_to_s3.py`: This is the `parameterized version` of `extract_to_aws.py` that demonstrate how you can avoid running the same flow for multiple times by parameterizing some critical variables into the flow code.
+- `extract_to_s3_parent_flow-deployment.yaml`: This is the deployment build file based on building the `parameterized_extract_to_s3.py` into a deployment by running `prefect deployment build -n` command.See more explanation on deployment below.
 - `extract_s3_to_redshift.py`: this is the code where the source data copy in the s3 is transformed and cleaned up, and then the cleaned-up version is saved to a transformed folder in the data warehouse (AWS Redshift).
+
 
 ## Creating a AWS Credentials Block in Prefect UI
 According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section).
@@ -124,6 +126,76 @@ Follow [this section](https://prefecthq.github.io/prefect-aws/#using-prefect-wit
 
 Note that, unlike the previous section, the code was started from scratch. This means that the `data_ingest.py` code we had from week 1 would not be reused. However, the idea is still the same.
 
+## Deployment in Prefect
+Deployment is a server-side concept that allows a flow to be scheduled and triggered through the Prefect API, automatically. (Think about we have to trigger the run in our local machine using cli command, which can be super slow.)
+We will need to first configure the deployment and tell Prefect how to behave and run the flows automatically.
+Note that multiple deployments are possible for a single flow. For example, with different deployments taking different parameters when run.
+
+To make a flow into a deployment run:
+```
+prefect deployment build path_to_flow.py:entrypoint_flow(here should be parent flow) -n "Name of the deployment
+```
+
+For example, when I deployed the `parameterized_extract_to_s3.py` I ran:
+
+```
+prefect deployment build ./parameterized_extract_to_s3.py:extract_to_s3_parent_flow -n "Parameterized Extract to S3"
+```
+
+After running the command, a `YAML` file will be created in the same folder. Inside the `yaml` file, the parameters could be updated. In line 11 in the `yaml` file, the `parameter` will take the parameters we have entered in the .py file for running the main flow: 
+
+```
+extract_to_s3_parent_flow(months=[6, 7, 8], year=2023, color='yellow')
+```
+
+It is entered as key-value pairs as:
+
+```
+parameters: {"color": "yellow", "months":[6, 7, 8], "year": 2023}
+```
+
+After updating the `yaml` file (and saving it), run `prefect deployment apply` command:
+
+```
+prefect deployment apply <name_of_yaml>
+```
+
+for example, I ran:
+
+```
+prefect deployment apply extract_to_s3_parent_flow-deployment.yaml
+```
+
+This command will ensure all the updated metadata saved in the `yaml` file is sent over to the Prefect API. Note that in the Prefect UI Server, you should be able to see the deployment being switched on.
+
+### Prefect Work Pools and Agents
+Also note that the command line also returns the following info:
+
+```
+To execute flow runs from this deployment, start an agent that pulls work from the 'default' work queue:
+$ prefect agent start -q 'default'
+```
+
+If the agent is not set up, your flow will not be run if you trigger the deployedment to be run in the UI. Instead this run will be marked as scheduled. You can also check it in the Prefct UI `Work Pools` section.
+
+An agent, according to the Zoomcamp training video, is a `very very lightweight Python process` and it `lives in the execution environment`. (In our case we are running on our local machine)
+
+The agent is pulling things to run from a `Work Pool`. In the deployment settings, you can set which work pool you want to send the runs to. This is great if you want a flow to be run on a certain server or a Cloud deployment.
+
+In the `Work Pool` section, copy over the command from the top of the UI page to start the agent and run it in your terminal:
+
+```
+prefect agent start --pool "default-agent-pool"
+```
+
+Notice that the flow run was completed very quickly versus you triggering it with your local machine! (You can do Ctrl + C to stope the agent).
+
+## Notification
+
+We should always set up notifications to notify the status of a deployment flow run, especially when it fails!
+
+A notification can be set up in the Prefect UI's `Notification` section. Where it allows you to set up notifications by the Run States. You can also do a Slack webhook to forward the notification to your Slack.
+Follow [this Slack guide](https://api.slack.com/messaging/webhooks) to learn how to set up a Slack App to receive notifications using Incoming Webhooks.
 ## Uploading DataFrame to Redshift
 To be able to do this, the best approach would be using the AWS SDK called [aws-wrangler](https://aws-sdk-pandas.readthedocs.io/en/stable/).
 The `/aws_wrangler_tutorial` contains some simple python notebook exercise I did to test out this method before adding it to the actual code.
@@ -146,6 +218,9 @@ After you have uploaded data to redshift, make sure you are connecting to the da
 - Learn about Prefect Blocks [here](https://docs.prefect.io/latest/concepts/blocks/)
 ## Prefect Reference
 - `prefect-aws` [documentation](https://prefecthq.github.io/prefect-aws/)
+- prefect deployment [documentation](https://docs.prefect.io/latest/tutorial/deployments/)
+- more on prefect deployment and Work Pools [here](https://docs.prefect.io/latest/guides/prefect-deploy/)
+- Prefect [Blog post](https://discourse.prefect.io/t/how-does-the-prefect-deployment-build-and-apply-cli-work-and-how-can-you-customize-it/1456#what-does-prefect-deployment-build-do-1) explaining what does `prefect deployment build` do
 ## AWS SDK `awswrangler` Reference
 - awswrangler: Redshift copy and upload [tutorial reference](https://aws-sdk-pandas.readthedocs.io/en/stable/tutorials/008%20-%20Redshift%20-%20Copy%20%26%20Unload.html)
 - awswrangler.redshift.to_sql [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.to_sql.html)

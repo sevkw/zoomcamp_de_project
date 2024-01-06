@@ -1,0 +1,60 @@
+###
+### A complete description of a Prefect Deployment for flow 'extract-to-s3-parent-flow'
+###
+name: Parameterized Extract to S3
+description: null
+version: 7c6f573b4f2075779f9d30692f2886c7
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: null
+tags: []
+parameters: {"color": "yellow", "months":[1, 2, 3], "year": 2021}
+schedule: null
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: extract-to-s3-parent-flow
+manifest_path: null
+storage: null
+path: /home/kerry/zoomcamp_de_project/week2_workflow_orchestration/extraction_aws
+entrypoint: parameterized_extract_to_s3.py:extract_to_s3_parent_flow
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    months:
+      title: months
+      default:
+      - 1
+      - 2
+      position: 0
+      type: array
+      items: {}
+    year:
+      title: year
+      default: 2023
+      position: 1
+      type: integer
+    color:
+      title: color
+      default: yellow
+      position: 2
+      type: string
+  required: null
+  definitions: null
+timestamp: '2024-01-06T20:29:05.321609+00:00'
+triggers: []
+enforce_parameter_schema: null
