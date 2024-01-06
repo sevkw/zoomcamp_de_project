@@ -136,6 +136,8 @@ To make a flow into a deployment run:
 prefect deployment build path_to_flow.py:entrypoint_flow(here should be parent flow) -n "Name of the deployment
 ```
 
+**You can run `prefect deployment build --help` to checkout the tags you could use**
+
 For example, when I deployed the `parameterized_extract_to_s3.py` I ran:
 
 ```
@@ -196,7 +198,19 @@ We should always set up notifications to notify the status of a deployment flow 
 
 A notification can be set up in the Prefect UI's `Notification` section. Where it allows you to set up notifications by the Run States. You can also do a Slack webhook to forward the notification to your Slack.
 Follow [this Slack guide](https://api.slack.com/messaging/webhooks) to learn how to set up a Slack App to receive notifications using Incoming Webhooks.
-## Uploading DataFrame to Redshift
+
+## Prefect Flow Schedule
+Deployments can be scheduled through Prefect UI or the corresponding YAML file. Read more about Prefect schedules [here](https://docs.prefect.io/latest/concepts/schedules/).
+
+In the video, the lecturer demonstrated how a schedule could be attached upon building a new deployment via CLI.
+
+```
+prefect deployment build ./parameterized_extract_to_s3.py:extract_to_s3_parent_flow -n extract_to_s3_v2 --cron "0 0 * * *" -a 
+```
+`-a` at the end means to apply the cron configuration immediately
+
+## Running Prefect Flow in Docker Containers
+# Uploading DataFrame to Redshift
 To be able to do this, the best approach would be using the AWS SDK called [aws-wrangler](https://aws-sdk-pandas.readthedocs.io/en/stable/).
 The `/aws_wrangler_tutorial` contains some simple python notebook exercise I did to test out this method before adding it to the actual code.
 
@@ -221,6 +235,8 @@ After you have uploaded data to redshift, make sure you are connecting to the da
 - prefect deployment [documentation](https://docs.prefect.io/latest/tutorial/deployments/)
 - more on prefect deployment and Work Pools [here](https://docs.prefect.io/latest/guides/prefect-deploy/)
 - Prefect [Blog post](https://discourse.prefect.io/t/how-does-the-prefect-deployment-build-and-apply-cli-work-and-how-can-you-customize-it/1456#what-does-prefect-deployment-build-do-1) explaining what does `prefect deployment build` do
+- Learn more about Prefect deployment Work Pool and Workers [here](https://docs.prefect.io/latest/concepts/work-pools/)
+- Learn more about Prefect [Schedules](https://docs.prefect.io/latest/concepts/schedules/)
 ## AWS SDK `awswrangler` Reference
 - awswrangler: Redshift copy and upload [tutorial reference](https://aws-sdk-pandas.readthedocs.io/en/stable/tutorials/008%20-%20Redshift%20-%20Copy%20%26%20Unload.html)
 - awswrangler.redshift.to_sql [documentation](https://aws-sdk-pandas.readthedocs.io/en/3.4.2/stubs/awswrangler.redshift.to_sql.html)
