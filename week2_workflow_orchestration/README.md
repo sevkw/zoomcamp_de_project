@@ -224,6 +224,47 @@ A `Dockerfile` is created in `week2_workflow_orchestration` folder to demonstrat
 The docker file inherits FROM the [prefect image](https://hub.docker.com/r/prefecthq/prefect).
 
 
+Run `docker image build -t sevkw/prefect:zoomcamp .` to get an image built (while ensure you are still in Week2 folder where the Dockerfile is located).  Note, for the first build, it could take some ⏲️.
+To learn more about `docker image build -t` command, check [here](https://docs.docker.com/reference/cli/docker/image/build/#tag).
+
+Once the image is build, you can run `docker images` to view a list of images you have. You should see the image you just built showing up like below:
+
+```
+REPOSITORY                   TAG               IMAGE ID       CREATED          SIZE
+prefect/zoomcamp             latest            4098e2f8dab7   15 seconds ago   934MB
+```
+
+You can push this image to docker hub by running `docker image push <image_name>`, check command reference [here](https://docs.docker.com/reference/cli/docker/image/push/).
+
+### Building a New Prefect Block for Docker Container
+
+We need to build a new prefect block for the docker container we will be creating for our deployment. This can be created via the Prefect server UI Block section. See reference [here](https://docs.prefect.io/latest/guides/docker/).
+
+I named the block as `zoomcamp-prefect-container`.
+
+Under the `Image` section, after ensuring you have pushed your image to Docker hub, you need to drop the name of your image here. For me, I entered `sevkw/prefect:zoomcamp`. After creating the container (following [this video](https://youtu.be/psNSzqTsi-s?feature=shared)) you should have copied the following code to a deploy.py file you would soon create
+
+```
+from prefect.infrastructure.container import DockerContainer
+docker_container_block = DockerContainer.load("zoomcamp-prefect-container")
+```
+
+Then follow the rest of the video to complete the deployment python code and run the deployment on a Docker container. After ensuring you have set the prefect profile to the Prefect server api and the Redshift serverless has been provisioned. You can run the deployment using:
+
+```bash
+prefect deployment run extract-to-s3-parent-flow/docker-deployment-flow
+```
+
+you can override the pre-existing parameter by adding `-p`
+
+```bash
+prefect deployment run extract-to-s3-parent-flow/docker-deployment-flow -p "months=[1,2]"
+```
+
+When I ran the command my flow seemed to be Crashed and it was due to Network Connection Error.
+
+[This documentation](https://www.restack.io/docs/prefect-knowledge-prefect-api-connection-error) gives some clue. However, it does not resolve the issue on my end.
+
 # Uploading DataFrame to Redshift
 To be able to do this, the best approach would be using the AWS SDK called [aws-wrangler](https://aws-sdk-pandas.readthedocs.io/en/stable/).
 The `/aws_wrangler_tutorial` contains some simple python notebook exercise I did to test out this method before adding it to the actual code.
