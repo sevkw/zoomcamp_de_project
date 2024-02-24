@@ -7,7 +7,7 @@ To be able to run the local python codes and load the data to the postgres datab
 docker compose up -d
 ```
 
-### Terraform from Week1 Can be Used for This Week's Exerice
+### Terraform from Week1 Can be Used for This Week's Exercise
 This week's exercise involves extracting raw data from original source and save a copy to s3 bucket. Then reading the raw copy from s3 bucket and transform it. The transformed data will be uploaded to Amazon Redshift. 
 
 Recall from Week 1's exercise, we have used Terraform to configure the resources we need. Therefore, before beginning this week's exericse, you can go into week1 folder and run `terraform apply` command inside the `terraform/` directory to start the service.
@@ -202,6 +202,7 @@ Follow [this Slack guide](https://api.slack.com/messaging/webhooks) to learn how
 ## Prefect Flow Schedule
 Deployments can be scheduled through Prefect UI or the corresponding YAML file. Read more about Prefect schedules [here](https://docs.prefect.io/latest/concepts/schedules/).
 
+### Scheduling upon Deployment Creation
 In the video, the lecturer demonstrated how a schedule could be attached upon building a new deployment via CLI.
 
 ```
@@ -209,7 +210,20 @@ prefect deployment build ./parameterized_extract_to_s3.py:extract_to_s3_parent_f
 ```
 `-a` at the end means to apply the cron configuration immediately
 
+### Scheduling after Deployment Creation
+Scheduling can also be set up after a deployment has been built. We use the `set-schedule` command to set the schedule for a given deployment. 
+
 ## Running Prefect Flow in Docker Containers
+
+Our flow code can be stored in a Docker image and then uploaded to a Docker hub. A Docker container could be created based on that image, in which our flow code has been stored.
+
+### Creating a Dockerfile
+
+A `Dockerfile` is created in `week2_workflow_orchestration` folder to demonstrate this concept.
+
+The docker file inherits FROM the [prefect image](https://hub.docker.com/r/prefecthq/prefect).
+
+
 # Uploading DataFrame to Redshift
 To be able to do this, the best approach would be using the AWS SDK called [aws-wrangler](https://aws-sdk-pandas.readthedocs.io/en/stable/).
 The `/aws_wrangler_tutorial` contains some simple python notebook exercise I did to test out this method before adding it to the actual code.
@@ -225,6 +239,27 @@ This [Stackoverflow thread](https://stackoverflow.com/questions/67557052/connect
 You will also need to ensure your VPC cluster's security group is configured to allow inbound traffic via port 5439. For simplicity I just allowed all IPv4 and IPv6 inbound flow from anywhere to my Redshift Cluster. If this is not properly set up, you will encounter a timeout when trying to connect to Redshift using the awswrangler.
 
 After you have uploaded data to redshift, make sure you are connecting to the database using username and password. By default, you will be connected via your current IAM user, which you will not see any data coming up. 
+
+# 🐎 Recap Quick Notes
+
+In case you return to this week's project folder after idling for a while (like me, coming back after a long trip). You can simply rerun the project in the following steps:
+
+1. You do not need to have docker container started 
+2. ensure you run the `terraform apply` command to provision the Redshift Serverless
+3. `cd` into the `extraction_aws/` directory and run `python3 parameterized_extract_to_s3.py` to trigger this flow to be run. You should see the flow completed successfully.
+4. You can also go to the Prefect Server UI and trigger the deployment to be run, but ensure you have the agent pool running first by running `prefect agent start --pool "default-agent-pool" ` in your terminal. You should see a 🟢 next to your deployed flow and you can trigger the deployment to run now. Below is what you should expect to see:
+
+```
+11:50:00.106 | INFO    | Flow run 'overjoyed-mamba' - Finished in state Completed('All states completed.')
+11:50:00.187 | INFO    | Flow run 'magic-dormouse' - Finished in state Completed('All states completed.')
+11:50:00.955 | INFO    | prefect.infrastructure.process - Process 'magic-dormouse' exited cleanly.
+```
+5. **Ensure you stop your provisioned service to avoid being charged**. Run the following command in week1's `terraform/` directory:
+
+```
+terraform destroy -target=aws_redshiftserverless_namespace.zoomcamp_dataset -target=aws_redshiftserverless_workgroup.zoomcamp_dataset -target=aws_redshiftserverless_usage_limit.zoomcamp_dataset
+```
+6. Also remember to stop your Prefect server (Ctl+c)
 
 # 📚References
 

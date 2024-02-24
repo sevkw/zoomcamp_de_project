@@ -63,8 +63,8 @@ def write_to_s3(path:Path, bucket: str) -> None:
 def extract_data_to_s3(year:int, month:int, color:str) -> None:
     """
         The main flow function that extracts raw data from original source and save the cleaned data to AWS S3 bucket.
-        The AWS S3 bucket to save the data is called datalake-bucket-zoomcamp-2023, this is provisioned by Terraform.
-        Ensure that the s3 bucket has been provisioned by running:
+        The AWS S3 bucket that saves the data is called datalake-bucket-zoomcamp-2023, this is provisioned by Terraform.
+        Ensure that the s3 bucket has been provisioned by running the following command in week1 terraform/  folder:
         terraform apply -target=aws_s3_bucket.data-lake-bucket -target=aws_s3_bucket_versioning.datalake_versioning -target=aws_s3_bucket_lifecycle_configuration.datalake-lifecycle
     """
     data_partition_name = f"{color}_tripdata_{year}-{month:02}"
