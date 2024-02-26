@@ -84,6 +84,17 @@ host: localhost
 port: 5432
 ```
 
+**WARNING**
+
+Note that the block setting above via driver `postgresql+psycopg2` no longer works as running flows using this connect will result in an `AttributeError: 'SQLAlchemyConnector' object has no attribute 'cursor'.`. Referencing [this Stackoverflow discussion](https://stackoverflow.com/questions/75315117/attributeerror-connection-object-has-no-attribute-connect-when-use-df-to-sq), it appears that there is an issue with pandas to_sql(). 
+
+Instead, please set up the block as **DatabaseCredentials** ([docs](https://prefecthq.github.io/prefect-sqlalchemy/credentials/#prefect_sqlalchemy.credentials.DatabaseCredentials)) and then call the [.get_engine() method](https://prefecthq.github.io/prefect-sqlalchemy/credentials/#prefect_sqlalchemy.credentials.DatabaseCredentials.get_engine) as exemplified in `data_etl.py`. You can use the same settings from SQLAlchemy Connector block. After that, your flow should run successfully.
+
+```
+Connection Info
+postgresql://admin:admin@localhost:5432/ny_taxi
+```
+
 After setting up the block, copy or retype the following code from the block to the `.py` file:
 
 ```python
@@ -118,7 +129,7 @@ Overall the code files are very straight forward:
 
 
 ## Creating a AWS Credentials Block in Prefect UI
-According to the prefect-aws documentation, an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section).
+According to the [prefect-aws documentation](https://prefecthq.github.io/prefect-aws/#saving-credentials-to-a-block), an AWS Credentials Block has to be created. This can be done by a script or configured in the Prefect UI. I created mine via the UI, but you can follow the official documentation to create one using a script (see reference link in the Reference section).
 
 ## Using Prefect with AWS S3
 To be able to follow this section, we will need to create a new bucket for us to save the extracted and cleaned data.

@@ -7,7 +7,7 @@ from prefect import flow, task
 from prefect.tasks import task_input_hash
 from datetime import timedelta
 # import prefect-sqlalchemy
-from prefect_sqlalchemy import SqlAlchemyConnector
+from prefect_sqlalchemy import SqlAlchemyConnector, DatabaseCredentials
 
 ## added a task for data extraction
 @task(log_prints=True, retries=3, tags="zoomcamp", cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1))
@@ -50,19 +50,23 @@ def transform_data(df):
 @task(log_prints=True, retries=3)
 def ingest_data(df, table_name):
     # the database block copied from the Prefect block section
-    database_block = SqlAlchemyConnector.load("postgres-connector")
+    # Code below no longer works as there is an issue with pandas.to_sql() and SQLAlchemy
+    # database_block = SqlAlchemyConnector.load("postgres-connector")
+
+    # Ensure a DatabaseCredentials Block has been created
+    database_block = DatabaseCredentials.load("postgres-credentials")
 
     # engine_path = f"postgresql://{user}:{password}@{host}:{port}/{db}"
     # create an engine to connect to PostgreSQL database
     # before running this, ensure the PostgreSQL database is up and running in the container
     # engine = create_engine(engine_path)
     # engine.connect()
-    with database_block as engine:
-
+    # with database_block as engine:
+    engine = database_block.get_engine()
         # insert the headers
-        df.head(0).to_sql(name=table_name, con=engine, if_exists='replace')
+    df.head(0).to_sql(name=table_name, con=engine, if_exists='replace')
         
-        df.to_sql(name=table_name, con=engine, if_exists='append', index=False)
+    df.to_sql(name=table_name, con=engine, if_exists='append', index=False)
 
 # subflow demonstration
 @flow(name="Subflow", log_prints=True)
