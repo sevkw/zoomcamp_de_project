@@ -224,7 +224,7 @@ prefect deployment build ./parameterized_extract_to_s3.py:extract_to_s3_parent_f
 ### Scheduling after Deployment Creation
 Scheduling can also be set up after a deployment has been built. We use the `set-schedule` command to set the schedule for a given deployment. 
 
-## Running Prefect Flow in Docker Containers
+## Running Prefect Flow in Docker Containers ([Tutorial Video](https://www.youtube.com/watch?v=psNSzqTsi-s&t=1s))
 
 Our flow code can be stored in a Docker image and then uploaded to a Docker hub. A Docker container could be created based on that image, in which our flow code has been stored.
 
