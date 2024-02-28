@@ -74,7 +74,7 @@ mypy-boto3-secretsmanager==1.34.0
 nest-asyncio==1.5.8
 numpy==1.24.4
 oauthlib==3.2.2
-orjson==3.9.10
+orjson==3.9.15
 packaging==23.2
 pandas==2.0.3
 parso==0.8.3
