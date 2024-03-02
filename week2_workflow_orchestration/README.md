@@ -228,6 +228,10 @@ Scheduling can also be set up after a deployment has been built. We use the `set
 
 Our flow code can be stored in a Docker image and then uploaded to a Docker hub. A Docker container could be created based on that image, in which our flow code has been stored.
 
+**Note**
+
+I could not follow the docker part with Prefect server running on my local machine, but I followed in with Prefect cloud. Log into prefect cloud by running `prefect cloud login` and a server will start just like how you do it with `prefect server start`.
+
 ### Creating a Dockerfile
 
 A `Dockerfile` is created in `week2_workflow_orchestration` folder to demonstrate this concept.

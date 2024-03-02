@@ -1,5 +1,0 @@
-prefect==2.14.10
-pandas==2.0.3
-prefect-sqlalchemy==0.4.0
-pyarrow==14.0.1
-fastparquet==2023.10.1
