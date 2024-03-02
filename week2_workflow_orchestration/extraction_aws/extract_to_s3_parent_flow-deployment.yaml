@@ -1,7 +1,7 @@
 ###
 ### A complete description of a Prefect Deployment for flow 'extract-to-s3-parent-flow'
 ###
-name: Parameterized Extract to S3
+name: extract-to-s3
 description: null
 version: 7c6f573b4f2075779f9d30692f2886c7
 # The work queue that will handle this deployment's runs

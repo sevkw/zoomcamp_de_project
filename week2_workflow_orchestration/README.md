@@ -230,12 +230,27 @@ Our flow code can be stored in a Docker image and then uploaded to a Docker hub.
 
 **Note**
 
-I could not follow the docker part with Prefect server running on my local machine, but I followed in with Prefect cloud. Log into prefect cloud by running `prefect cloud login` and a server will start just like how you do it with `prefect server start`.
+I could not follow the docker part with Prefect server running on my local machine, and I also tried following the zoomcamp video with Prefect cloud. I kept running into an error showing `FileNotFoundError: [Errno 2] No such file or directory: '/opt/prefect/flows'`. I do not want to waste time on debugging, but I believe there are some issues with the deployment picking up the image from my docker registry, so the actual image I pushed to my docker hub repo did not get referenced, so the flow code could not be picked up.
+
+I tried running the deployment in a docker container on my local machine, using the same image referenced in the Docker Container Block. I got it running flawlessly. Thefore, the following section will detail how this is done: (very similar to the demo in the Zoomcamp video).
 
 ### Creating a Dockerfile
 
 A `Dockerfile` is created in `week2_workflow_orchestration` folder to demonstrate this concept.
 
+```
+FROM prefecthq/prefect:2.14.10-python3.8
+
+ADD ./extraction_aws/parameterized_extract_to_s3_docker.py /opt/prefect/flows/
+ADD ./extraction_aws/data /opt/prefect/data/
+
+COPY docker-requirements.txt /tmp/
+RUN pip install -r /tmp/docker-requirements.txt --no-cache-dir
+
+ENV PREFECT_API_URL=<your-prefect-api-url> 
+ENV PREFECT_API_KEY=<your-prefectAPI-key>
+
+```
 The docker file inherits FROM the [prefect image](https://hub.docker.com/r/prefecthq/prefect).
 
 
@@ -251,13 +266,42 @@ prefect/zoomcamp             latest            4098e2f8dab7   15 seconds ago   9
 
 You can push this image to docker hub by running `docker image push <image_name>`, check command reference [here](https://docs.docker.com/reference/cli/docker/image/push/).
 
-### Building a New Prefect Block for Docker Container
+### Deploy The Flow
+
+You should have an deployment by running:
+
+
+```
+prefect deployment apply extract_to_s3_parent_flow-deployment.yaml
+```
+
+then start the agent by running as instructed.
+
+## Trigger Deployment Run through Docker
+
+```
+docker run sevkw/prefect:zoomcamp prefect deployment run extract-to-s3-parent-flow/extract-to-s3
+```
+You should have your deployment run successfully.
+
+**The section below does not need to be followed as I could not get the deployment running by following the Zoomcamp video.**
+
+### Building a New Prefect Block for Docker Container (Do not need to do this if you want to run the deployment through local container)
 
 We need to build a new prefect block for the docker container we will be creating for our deployment. This can be created via the Prefect server UI Block section. See reference [here](https://docs.prefect.io/latest/guides/docker/).
 
-I named the block as `zoomcamp-prefect-container`.
 
-Under the `Image` section, after ensuring you have pushed your image to Docker hub, you need to drop the name of your image here. For me, I entered `sevkw/prefect:zoomcamp`. After creating the container (following [this video](https://youtu.be/psNSzqTsi-s?feature=shared)) you should have copied the following code to a deploy.py file you would soon create
+```
+Block Name: zoomcamp-prefect-container
+Image: sevkw/prefect:zoomcamp
+ImagePullPolicy: ALWAYS
+Auto-remove: True
+
+```
+
+Under the `Image` section, after ensuring you have pushed your image to Docker hub, you need to drop the name of your image here. For me, I entered `sevkw/prefect:zoomcamp`. 
+
+After creating the container (following [this video](https://youtu.be/psNSzqTsi-s?feature=shared)) you should have copied the following code to a deploy.py file you would soon create
 
 ```
 from prefect.infrastructure.container import DockerContainer
